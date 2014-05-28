@@ -1608,14 +1608,13 @@ struct security_operations {
 
 	int (*kdbus_bus_alloc)(struct kdbus_bus *bus);
 	void (*kdbus_bus_free)(struct kdbus_bus *bus);
-	int (*kdbus_send)(const struct kdbus_bus *bus);
-	int (*kdbus_recv)(const struct kdbus_bus *bus);
-	int (*kdbus_name_acquire)(const struct kdbus_bus *bus, const char *name);
+	int (*kdbus_send)(const struct kdbus_conn *conn, const struct kdbus_bus *bus);
+	int (*kdbus_recv)(const struct kdbus_conn *conn, const struct kdbus_bus *bus);
+	int (*kdbus_name_acquire)(const struct kdbus_conn *conn, const char *name);
 	int (*kdbus_name_list)(const struct kdbus_bus *bus);
 
-	int (*kdbus_ep_alloc)(struct kdbus_ep *ep);
-	void (*kdbus_ep_free)(struct kdbus_ep *ep);
-	int (*kdbus_ep_setpolicy)(struct kdbus_ep *ep);
+	int (*kdbus_ep_create)(const struct kdbus_bus *bus);
+	int (*kdbus_ep_setpolicy)(const struct kdbus_bus *bus);
 
 	int (*kdbus_connect)(struct kdbus_conn *conn, const char *secctx, u32 seclen);
 	void (*kdbus_conn_free)(struct kdbus_conn *conn);
@@ -1877,14 +1876,13 @@ void security_kdbus_domain_free(struct kdbus_domain *domain);
 
 int security_kdbus_bus_alloc(struct kdbus_bus *bus);
 void security_kdbus_bus_free(struct kdbus_bus *bus);
-int security_kdbus_send(const struct kdbus_bus *bus);
-int security_kdbus_recv(const struct kdbus_bus *bus);
-int security_kdbus_name_acquire(const struct kdbus_bus *bus, const char *name);
+int security_kdbus_send(const struct kdbus_conn *conn, const struct kdbus_bus *bus);
+int security_kdbus_recv(const struct kdbus_conn *conn, const struct kdbus_bus *bus);
+int security_kdbus_name_acquire(const struct kdbus_conn *conn, const char *name);
 int security_kdbus_name_list(const struct kdbus_bus *bus);
 
-int security_kdbus_ep_alloc(struct kdbus_ep *ep);
-void security_kdbus_ep_free(struct kdbus_ep *ep);
-int security_kdbus_ep_setpolicy(struct kdbus_ep *ep);
+int security_kdbus_ep_create(struct kdbus_bus *bus);
+int security_kdbus_ep_setpolicy(struct kdbus_bus *bus);
 
 int security_kdbus_connect(struct kdbus_conn *conn, const char *secctx, u32 seclen);
 void security_kdbus_conn_free(struct kdbus_conn *conn);
@@ -2610,17 +2608,19 @@ static inline void security_kdbus_bus_free(struct kdbus_bus *bus)
 {
 }
 
-static inline int security_kdbus_send(const struct kdbus_bus *bus)
+static inline int security_kdbus_send(const struct kdbus_conn *conn,
+				      const struct kdbus_bus *bus)
 {
 	return 0;
 }
 
-static inline int security_kdbus_recv(const struct kdbus_bus *bus)
+static inline int security_kdbus_recv(const struct kdbus_conn *conn,
+				      const struct kdbus_bus *bus)
 {
 	return 0;
 }
 
-static inline int security_kdbus_name_acquire(const struct kdbus_bus *bus,
+static inline int security_kdbus_name_acquire(const struct kdbus_conn *conn,
 					      const char *name)
 {
 	return 0;
@@ -2631,16 +2631,12 @@ static inline int security_kdbus_name_list(const struct kdbus_bus *bus)
 	return 0;
 }
 
-static inline int security_kdbus_ep_alloc(struct kdbus_ep *ep)
+static inline int security_kdbus_ep_create(const struct kdbus_bus *bus)
 {
 	return 0;
 }
 
-static inline void security_kdbus_ep_free(const struct kdbus_ep *ep)
-{
-}
-
-static inline int security_kdbus_ep_setpolicy(const struct kdbus_ep *ep)
+static inline int security_kdbus_ep_setpolicy(const struct kdbus_bus *bus)
 {
 	return 0;
 }
