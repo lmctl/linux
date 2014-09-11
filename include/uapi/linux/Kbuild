@@ -205,6 +205,7 @@ header-y += ivtvfb.h
 header-y += ixjuser.h
 header-y += jffs2.h
 header-y += joystick.h
+header-y += kdbus.h
 header-y += kd.h
 header-y += kdev_t.h
 header-y += kernel-page-flags.h
