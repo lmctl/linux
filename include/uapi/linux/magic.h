@@ -73,4 +73,6 @@
 #define ANON_INODE_FS_MAGIC	0x09041934
 
 
+#define KDBUS_SUPER_MAGIC	0x44427573
+
 #endif /* __LINUX_MAGIC_H__ */
