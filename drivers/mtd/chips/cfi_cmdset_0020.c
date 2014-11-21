@@ -22,7 +22,6 @@
 #include <linux/types.h>
 #include <linux/kernel.h>
 #include <linux/sched.h>
-#include <linux/init.h>
 #include <asm/io.h>
 #include <asm/byteorder.h>
 
@@ -176,7 +175,6 @@ static struct mtd_info *cfi_staa_setup(struct map_info *map)
 	//printk(KERN_DEBUG "number of CFI chips: %d\n", cfi->numchips);
 
 	if (!mtd) {
-		printk(KERN_ERR "Failed to allocate memory for MTD device\n");
 		kfree(cfi->cmdset_priv);
 		return NULL;
 	}
@@ -189,7 +187,6 @@ static struct mtd_info *cfi_staa_setup(struct map_info *map)
 	mtd->eraseregions = kmalloc(sizeof(struct mtd_erase_region_info)
 			* mtd->numeraseregions, GFP_KERNEL);
 	if (!mtd->eraseregions) {
-		printk(KERN_ERR "Failed to allocate memory for MTD erase region info\n");
 		kfree(cfi->cmdset_priv);
 		kfree(mtd);
 		return NULL;
@@ -228,15 +225,15 @@ static struct mtd_info *cfi_staa_setup(struct map_info *map)
 		}
 
 	/* Also select the correct geometry setup too */
-	mtd->erase = cfi_staa_erase_varsize;
-	mtd->read = cfi_staa_read;
-        mtd->write = cfi_staa_write_buffers;
-	mtd->writev = cfi_staa_writev;
-	mtd->sync = cfi_staa_sync;
-	mtd->lock = cfi_staa_lock;
-	mtd->unlock = cfi_staa_unlock;
-	mtd->suspend = cfi_staa_suspend;
-	mtd->resume = cfi_staa_resume;
+	mtd->_erase = cfi_staa_erase_varsize;
+	mtd->_read = cfi_staa_read;
+	mtd->_write = cfi_staa_write_buffers;
+	mtd->_writev = cfi_staa_writev;
+	mtd->_sync = cfi_staa_sync;
+	mtd->_lock = cfi_staa_lock;
+	mtd->_unlock = cfi_staa_unlock;
+	mtd->_suspend = cfi_staa_suspend;
+	mtd->_resume = cfi_staa_resume;
 	mtd->flags = MTD_CAP_NORFLASH & ~MTD_BIT_WRITEABLE;
 	mtd->writesize = 8; /* FIXME: Should be 0 for STMicro flashes w/out ECC */
 	mtd->writebufsize = cfi_interleave(cfi) << cfi->cfiq->MaxBufWriteSize;
@@ -393,8 +390,6 @@ static int cfi_staa_read (struct mtd_info *mtd, loff_t from, size_t len, size_t 
 	/* ofs: offset within the first chip that the first read should start */
 	chipnum = (from >> cfi->chipshift);
 	ofs = from - (chipnum <<  cfi->chipshift);
-
-	*retlen = 0;
 
 	while (len) {
 		unsigned long thislen;
@@ -616,10 +611,6 @@ static int cfi_staa_write_buffers (struct mtd_info *mtd, loff_t to,
 	int ret = 0;
 	int chipnum;
 	unsigned long ofs;
-
-	*retlen = 0;
-	if (!len)
-		return 0;
 
 	chipnum = to >> cfi->chipshift;
 	ofs = to  - (chipnum << cfi->chipshift);
@@ -904,12 +895,6 @@ static int cfi_staa_erase_varsize(struct mtd_info *mtd,
 	int i, first;
 	struct mtd_erase_region_info *regions = mtd->eraseregions;
 
-	if (instr->addr > mtd->size)
-		return -EINVAL;
-
-	if ((instr->len + instr->addr) > mtd->size)
-		return -EINVAL;
-
 	/* Check that both start and end of the requested erase are
 	 * aligned with the erasesize at the appropriate addresses.
 	 */
@@ -976,7 +961,7 @@ static int cfi_staa_erase_varsize(struct mtd_info *mtd,
 			chipnum++;
 
 			if (chipnum >= cfi->numchips)
-			break;
+				break;
 		}
 	}
 
@@ -1155,9 +1140,6 @@ static int cfi_staa_lock(struct mtd_info *mtd, loff_t ofs, uint64_t len)
 	if (len & (mtd->erasesize -1))
 		return -EINVAL;
 
-	if ((len + ofs) > mtd->size)
-		return -EINVAL;
-
 	chipnum = ofs >> cfi->chipshift;
 	adr = ofs - (chipnum << cfi->chipshift);
 
@@ -1188,7 +1170,7 @@ static int cfi_staa_lock(struct mtd_info *mtd, loff_t ofs, uint64_t len)
 			chipnum++;
 
 			if (chipnum >= cfi->numchips)
-			break;
+				break;
 		}
 	}
 	return 0;

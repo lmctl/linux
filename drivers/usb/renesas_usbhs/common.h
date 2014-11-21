@@ -22,8 +22,8 @@
 
 struct usbhs_priv;
 
-#include "./mod.h"
-#include "./pipe.h"
+#include "mod.h"
+#include "pipe.h"
 
 /*
  *
@@ -242,6 +242,7 @@ struct usbhs_priv {
 
 	void __iomem *base;
 	unsigned int irq;
+	unsigned long irqflags;
 
 	struct renesas_usbhs_platform_callback	pfunc;
 	struct renesas_usbhs_driver_param	dparam;
@@ -267,6 +268,8 @@ struct usbhs_priv {
 	 * fifo control
 	 */
 	struct usbhs_fifo_info fifo_info;
+
+	struct usb_phy *phy;
 };
 
 /*
@@ -284,6 +287,7 @@ void usbhs_bset(struct usbhs_priv *priv, u32 reg, u16 mask, u16 data);
  */
 void usbhs_sys_host_ctrl(struct usbhs_priv *priv, int enable);
 void usbhs_sys_function_ctrl(struct usbhs_priv *priv, int enable);
+void usbhs_sys_function_pullup(struct usbhs_priv *priv, int enable);
 void usbhs_sys_set_test_mode(struct usbhs_priv *priv, u16 mode);
 
 /*

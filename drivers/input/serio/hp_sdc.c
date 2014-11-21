@@ -71,7 +71,6 @@
 #include <linux/slab.h>
 #include <linux/hil.h>
 #include <asm/io.h>
-#include <asm/system.h>
 
 /* Machine-specific abstraction */
 
@@ -879,7 +878,7 @@ static int __init hp_sdc_init(void)
 #endif
 
 	errstr = "IRQ not available for";
-	if (request_irq(hp_sdc.irq, &hp_sdc_isr, IRQF_SHARED|IRQF_SAMPLE_RANDOM,
+	if (request_irq(hp_sdc.irq, &hp_sdc_isr, IRQF_SHARED,
 			"HP SDC", &hp_sdc))
 		goto err1;
 
@@ -985,7 +984,7 @@ static void hp_sdc_exit(void)
 	free_irq(hp_sdc.irq, &hp_sdc);
 	write_unlock_irq(&hp_sdc.lock);
 
-	del_timer(&hp_sdc.kicker);
+	del_timer_sync(&hp_sdc.kicker);
 
 	tasklet_kill(&hp_sdc.task);
 
