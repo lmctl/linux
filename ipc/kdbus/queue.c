@@ -24,6 +24,7 @@
 #include <linux/poll.h>
 #include <linux/sched.h>
 #include <linux/sizes.h>
+#include <linux/security.h>
 #include <linux/slab.h>
 #include <linux/syscalls.h>
 
@@ -40,6 +41,18 @@ static int kdbus_queue_entry_fds_install(struct kdbus_queue_entry *entry)
 	unsigned int i;
 	int ret, *fds;
 	size_t count;
+
+        for (i = 0; i < entry->fds_count; i++) {
+                ret = security_file_receive(entry->fds_fp[i]);
+                if (ret)
+                        return ret;
+        }
+
+        for (i = 0; i < entry->memfds_count; i++) {
+                ret = security_file_receive(entry->memfds_fp[i]);
+                if (ret)
+                        return ret;
+        }
 
 	/* get array of file descriptors */
 	count = entry->fds_count + entry->memfds_count;
