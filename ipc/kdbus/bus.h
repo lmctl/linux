@@ -46,6 +46,7 @@
  * @conn_hash:		Map of connection IDs
  * @monitors_list:	Connections that monitor this bus
  * @meta:		Meta information about the bus creator
+ * @security:		LSM security blob
  *
  * A bus provides a "bus" endpoint / device node.
  *
@@ -77,6 +78,7 @@ struct kdbus_bus {
 	struct list_head monitors_list;
 
 	struct kdbus_meta *meta;
+	void *security;
 };
 
 struct kdbus_kmsg;

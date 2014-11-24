@@ -33,6 +33,7 @@
  * @user_idr:		Map of all users; smallest possible index
  * @pid_namespace:	PID namespace, pinned at creation time
  * @user_namespace:	User namespace, pinned at creation time
+ * @security:		LSM security blob
  */
 struct kdbus_domain {
 	struct kdbus_node node;
@@ -44,6 +45,7 @@ struct kdbus_domain {
 	struct idr user_idr;
 	struct pid_namespace *pid_namespace;
 	struct user_namespace *user_namespace;
+	void *security;
 };
 
 /**

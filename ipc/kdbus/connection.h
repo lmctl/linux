@@ -67,6 +67,7 @@
  * @wait:		Wake up this endpoint
  * @queue:		The message queue associated with this connection
  * @privileged:		Whether this connection is privileged on the bus
+ * @security:		LSM security blob
  */
 struct kdbus_conn {
 	struct kref kref;
@@ -103,6 +104,7 @@ struct kdbus_conn {
 	wait_queue_head_t wait;
 	struct kdbus_queue queue;
 	bool privileged : 1;
+	void *security;
 };
 
 struct kdbus_kmsg;
