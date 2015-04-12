@@ -2,6 +2,7 @@
 #define KDBUS_COMPAT_3_10_H
 
 #include <linux/kernel.h>
+#include <linux/err.h>
 
 /* connection.c */
 #define U16_MAX 65535
@@ -36,6 +37,13 @@ static void truncate_inode_pages_final(struct address_space *p)
 }
 
 /* handle.c */
-#define PTR_ERR_OR_ZERO(ptr) 42
+static inline int __must_check PTR_ERR_OR_ZERO(__force const void *ptr)
+{
+        if (IS_ERR(ptr))
+                return PTR_ERR(ptr);
+        else
+                return 0;
+}
+
 
 #endif /* KDBUS_COMPAT_3_10_H */
