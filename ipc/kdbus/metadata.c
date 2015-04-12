@@ -39,6 +39,8 @@
 #include "metadata.h"
 #include "names.h"
 
+#include "compat.h"
+
 /**
  * struct kdbus_meta_proc - Process metadata
  * @kref:		Reference counting
@@ -331,7 +333,7 @@ static int kdbus_meta_proc_collect_cmdline(struct kdbus_meta_proc *mp)
 
 static int kdbus_meta_proc_collect_cgroup(struct kdbus_meta_proc *mp)
 {
-#ifdef CONFIG_CGROUPS
+#if defined (CONFIG_CGROUPS) && KDBUS_COMPAT_FEATURE_DISABLE
 	void *page;
 	char *s;
 
@@ -339,8 +341,7 @@ static int kdbus_meta_proc_collect_cgroup(struct kdbus_meta_proc *mp)
 	if (!page)
 		return -ENOMEM;
 
-	//s = task_cgroup_path(current, page, PAGE_SIZE);
-	BUG();
+	s = task_cgroup_path(current, page, PAGE_SIZE);
 	if (s) {
 		mp->cgroup = kstrdup(s, GFP_KERNEL);
 		if (!mp->cgroup) {

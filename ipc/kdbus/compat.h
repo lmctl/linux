@@ -45,5 +45,7 @@ static inline int __must_check PTR_ERR_OR_ZERO(__force const void *ptr)
                 return 0;
 }
 
+/* metadata.c */
+#define KDBUS_COMPAT_FEATURE_DISABLE 0
 
 #endif /* KDBUS_COMPAT_3_10_H */
