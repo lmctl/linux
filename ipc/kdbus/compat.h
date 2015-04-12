@@ -5,9 +5,9 @@
 #include <linux/err.h>
 
 /* connection.c */
-#define U16_MAX 65535
-#define U8_MAX 255
-#define U32_MAX UINT_MAX
+#define U8_MAX		((uint8_t)(~0U))
+#define U16_MAX		((uint16_t)(~0U))
+#define U32_MAX		((uint32_t)(~0U))
 
 /* fs.c */
 typedef int (*filldir_t)(void *, const char *, int, loff_t, u64, unsigned);
