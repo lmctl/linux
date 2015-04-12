@@ -445,10 +445,13 @@ struct kdbus_node *kdbus_node_unref(struct kdbus_node *node)
 		if (safe.id > 0)
 			idr_remove(&kdbus_node_idr, safe.id);
 		/* drop caches after last node to not leak memory on unload */
+		/*
 		if (idr_is_empty(&kdbus_node_idr)) {
 			idr_destroy(&kdbus_node_idr);
 			idr_init(&kdbus_node_idr);
 		}
+		*/
+		BUG();
 		up_write(&kdbus_node_idr_lock);
 
 		kfree(safe.name);

@@ -32,6 +32,8 @@
 #include "handle.h"
 #include "node.h"
 
+#include "compat.h"
+
 #define kdbus_node_from_dentry(_dentry) \
 	((struct kdbus_node *)(_dentry)->d_fsdata)
 
@@ -141,7 +143,7 @@ static int fs_dir_fop_release(struct inode *inode, struct file *file)
 
 static const struct file_operations fs_dir_fops = {
 	.read		= generic_read_dir,
-	.iterate	= fs_dir_fop_iterate,
+//	.iterate	= fs_dir_fop_iterate,
 	.llseek		= fs_dir_fop_llseek,
 	.release	= fs_dir_fop_release,
 };

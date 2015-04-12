@@ -579,15 +579,17 @@ ssize_t
 kdbus_pool_slice_copy_iovec(const struct kdbus_pool_slice *slice, loff_t off,
 			    struct iovec *iov, size_t iov_len, size_t total_len)
 {
-	struct iov_iter iter;
+	//struct iov_iter iter;
 	ssize_t len;
+
+	BUG();
 
 	if (WARN_ON(off + total_len > slice->size))
 		return -EFAULT;
 
 	off += slice->off;
-	iov_iter_init(&iter, WRITE, iov, iov_len, total_len);
-	len = vfs_iter_write(slice->pool->f, &iter, &off);
+	//iov_iter_init(&iter, WRITE, iov, iov_len, total_len);
+	//len = vfs_iter_write(slice->pool->f, &iter, &off);
 
 	return (len >= 0 && len != total_len) ? -EFAULT : len;
 }
@@ -608,19 +610,21 @@ ssize_t kdbus_pool_slice_copy_kvec(const struct kdbus_pool_slice *slice,
 				   loff_t off, struct kvec *kvec,
 				   size_t kvec_len, size_t total_len)
 {
-	struct iov_iter iter;
+	//struct iov_iter iter;
 	mm_segment_t old_fs;
 	ssize_t len;
+
+	BUG();
 
 	if (WARN_ON(off + total_len > slice->size))
 		return -EFAULT;
 
 	off += slice->off;
-	iov_iter_kvec(&iter, WRITE | ITER_KVEC, kvec, kvec_len, total_len);
+//	iov_iter_kvec(&iter, WRITE | ITER_KVEC, kvec, kvec_len, total_len);
 
 	old_fs = get_fs();
 	set_fs(get_ds());
-	len = vfs_iter_write(slice->pool->f, &iter, &off);
+//	len = vfs_iter_write(slice->pool->f, &iter, &off);
 	set_fs(old_fs);
 
 	return (len >= 0 && len != total_len) ? -EFAULT : len;

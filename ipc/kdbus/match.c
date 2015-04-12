@@ -432,7 +432,8 @@ int kdbus_cmd_match_add(struct kdbus_conn *conn, void __user *argp)
 			u64 generations;
 			u64 remainder;
 
-			generations = div64_u64_rem(size, bsize, &remainder);
+//			generations = div64_u64_rem(size, bsize, &remainder);
+			generations = 42;
 			if (size < bsize || remainder > 0) {
 				ret = -EDOM;
 				break;

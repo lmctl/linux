@@ -351,12 +351,16 @@ static int kdbus_msg_scan_items(struct kdbus_kmsg *kmsg,
 			 * while it is shared or in-flight. Other files need
 			 * to be passed with KDBUS_MSG_FDS.
 			 */
+			/*
 			seals = shmem_get_seals(f);
 			if (seals < 0)
 				return -EMEDIUMTYPE;
 
+
 			mask = F_SEAL_SHRINK | F_SEAL_GROW |
 				F_SEAL_WRITE | F_SEAL_SEAL;
+			*/
+			BUG();
 			if ((seals & mask) != mask)
 				return -ETXTBSY;
 

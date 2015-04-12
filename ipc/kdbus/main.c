@@ -87,8 +87,8 @@ unsigned long long kdbus_meta_attach_mask = KDBUS_ATTACH_TIMESTAMP |
 					    KDBUS_ATTACH_NAMES |
 					    KDBUS_ATTACH_SECLABEL |
 					    KDBUS_ATTACH_CONN_DESCRIPTION;
-MODULE_PARM_DESC(attach_flags_mask, "Attach-flags mask for exported metadata");
-module_param_named(attach_flags_mask, kdbus_meta_attach_mask, ullong, 0644);
+//MODULE_PARM_DESC(attach_flags_mask, "Attach-flags mask for exported metadata");
+//module_param_named(attach_flags_mask, kdbus_meta_attach_mask, ullong, 0644);
 
 static int __init kdbus_init(void)
 {

@@ -38,6 +38,8 @@
 #include "domain.h"
 #include "policy.h"
 
+#include "compat.h"
+
 static int kdbus_args_verify(struct kdbus_args *args)
 {
 	struct kdbus_item *item;

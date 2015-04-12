@@ -49,6 +49,8 @@
 #include "util.h"
 #include "queue.h"
 
+#include "compat.h"
+
 #define KDBUS_CONN_ACTIVE_BIAS	(INT_MIN + 2)
 #define KDBUS_CONN_ACTIVE_NEW	(INT_MIN + 1)
 

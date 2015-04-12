@@ -339,7 +339,8 @@ static int kdbus_meta_proc_collect_cgroup(struct kdbus_meta_proc *mp)
 	if (!page)
 		return -ENOMEM;
 
-	s = task_cgroup_path(current, page, PAGE_SIZE);
+	//s = task_cgroup_path(current, page, PAGE_SIZE);
+	BUG();
 	if (s) {
 		mp->cgroup = kstrdup(s, GFP_KERNEL);
 		if (!mp->cgroup) {
