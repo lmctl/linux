@@ -33,7 +33,7 @@ static inline bool dir_emit_dots(struct file *file, struct dir_context *ctx)
 
 static void truncate_inode_pages_final(struct address_space *p)
 {
-	BUG();
+	truncate_inode_pages(p, 0);
 }
 
 /* handle.c */
